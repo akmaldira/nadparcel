@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ROOT
+  ADMIN
+  CASHIER
+  WORKER
+  USER
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  password      String?
+  role          UserRole  @default(USER)
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
+  deletedBy     String?   @map("deleted_by")
+  accounts      Account[]
+  sessions      Session[]
+
+  @@map("user")
+}
+
+model Account {
+  type              String
+  provider          String
+  providerAccountId String   @map("provider_account_id")
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  userId            String   @map("user_id")
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+  @@map("account")
+}
+
+model Session {
+  sessionToken String   @unique @map("session_token")
+  expires      DateTime
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  userId       String   @map("user_id")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("session")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+  @@map("verification_token")
+}
+
+model ItemCategory {
+  id        String    @id @default(cuid())
+  name      String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  deletedBy String?   @map("deleted_by")
+  items     Item[]
+
+  @@map("item_category")
+}
+
+model Item {
+  id         String        @id @default(cuid())
+  name       String
+  stock      Int           @default(0)
+  createdAt  DateTime      @default(now()) @map("created_at")
+  createdBy  String        @map("created_by")
+  updatedAt  DateTime      @updatedAt @map("updated_at")
+  deletedAt  DateTime?     @map("deleted_at")
+  deletedBy  String?       @map("deleted_by")
+  histories  ItemHistory[]
+  categoryId String        @map("category_id")
+  category   ItemCategory  @relation(fields: [categoryId], references: [id])
+
+  @@map("item")
+}
+
+model ItemHistory {
+  id            String    @id @default(cuid())
+  updatedStock  Int       @map("updated_stock")
+  priceEachItem Float     @map("price_each_item")
+  notes         String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  createdBy     String    @map("created_by")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
+  deletedBy     String?   @map("deleted_by")
+  itemId        String    @map("item_id")
+  item          Item      @relation(fields: [itemId], references: [id])
+
+  @@map("item_history")
+}
