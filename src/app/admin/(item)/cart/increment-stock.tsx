@@ -98,7 +98,7 @@ export default function IncrementStockDialog({
       <DialogTrigger asChild>
         <Button className="w-full" variant={item ? "default" : "secondary"}>
           <Plus />
-          {!item && "Tambah"} Stok
+          Stok
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -109,7 +109,7 @@ export default function IncrementStockDialog({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="id"
@@ -202,7 +202,7 @@ export default function IncrementStockDialog({
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="notes">Catatan (opsional)</FormLabel>
+                  <FormLabel htmlFor="notes">Catatan (Boleh Kosong)</FormLabel>
                   <FormControl>
                     <AutosizeTextarea id="notes" {...field} />
                   </FormControl>

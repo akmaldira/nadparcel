@@ -26,6 +26,8 @@ prisma.$use(
     models: {
       Item: true,
       ItemHistory: true,
+      Parcel: true,
+      ParcelToItem: true,
     },
     defaultConfig: {
       field: "deletedAt",

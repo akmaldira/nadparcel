@@ -36,6 +36,7 @@ export async function addItemAction(
         createdBy: user.email!,
         stock: data.stock,
         categoryId: data.categoryId,
+        maxPrice: data.priceEachItem || 0,
         histories:
           data.stock > 0
             ? {
@@ -53,6 +54,7 @@ export async function addItemAction(
     });
 
     revalidatePath("/admin/item");
+    revalidatePath("/admin/cart");
     return {
       status: "success",
       data: item,
@@ -139,6 +141,10 @@ export async function incrementStockAction(
         stock: {
           increment: values.stock,
         },
+        maxPrice:
+          item.maxPrice > values.priceEachItem
+            ? item.maxPrice
+            : values.priceEachItem,
         histories: {
           create: {
             updatedStock: values.stock,
@@ -154,6 +160,7 @@ export async function incrementStockAction(
     });
 
     revalidatePath("/admin/item");
+    revalidatePath("/admin/cart");
     return {
       status: "success",
       data: updatedItem,
@@ -218,6 +225,7 @@ export async function deleteItemAction(
     ]);
 
     revalidatePath("/admin/item");
+    revalidatePath("/admin/cart");
     return {
       status: "success",
       data: deletedItem,

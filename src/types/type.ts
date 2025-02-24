@@ -38,3 +38,14 @@ export type ItemWithHistories = Prisma.ItemGetPayload<{
     histories: true;
   };
 }>;
+
+export type ParcelWithRelation = Prisma.ParcelGetPayload<{
+  include: {
+    cart: true;
+    items: {
+      include: {
+        item: true;
+      };
+    };
+  };
+}>;

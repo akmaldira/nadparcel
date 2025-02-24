@@ -15,6 +15,8 @@ export default async function AdminUserPage() {
       image: true,
       createdAt: true,
       updatedAt: true,
+      deletedAt: true,
+      deletedBy: true,
     },
   });
   return (

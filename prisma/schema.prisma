@@ -92,17 +92,20 @@ model ItemCategory {
 }
 
 model Item {
-  id         String        @id @default(cuid())
-  name       String
-  stock      Int           @default(0)
-  createdAt  DateTime      @default(now()) @map("created_at")
-  createdBy  String        @map("created_by")
-  updatedAt  DateTime      @updatedAt @map("updated_at")
-  deletedAt  DateTime?     @map("deleted_at")
-  deletedBy  String?       @map("deleted_by")
-  histories  ItemHistory[]
-  categoryId String        @map("category_id")
-  category   ItemCategory  @relation(fields: [categoryId], references: [id])
+  id            String         @id @default(cuid())
+  name          String
+  stock         Int            @default(0)
+  maxPrice      Float          @map("max_price")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  createdBy     String         @map("created_by")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  deletedAt     DateTime?      @map("deleted_at")
+  deletedBy     String?        @map("deleted_by")
+  histories     ItemHistory[]
+  categoryId    String         @map("category_id")
+  category      ItemCategory   @relation(fields: [categoryId], references: [id])
+  cartParcels   Parcel[]
+  parcelToItems ParcelToItem[]
 
   @@map("item")
 }
@@ -121,4 +124,37 @@ model ItemHistory {
   item          Item      @relation(fields: [itemId], references: [id])
 
   @@map("item_history")
+}
+
+model ParcelToItem {
+  id        String    @id @default(cuid())
+  quantity  Int       @default(1)
+  parcelId  String    @map("parcel_id")
+  itemId    String    @map("item_id")
+  parcel    Parcel    @relation(fields: [parcelId], references: [id])
+  item      Item      @relation(fields: [itemId], references: [id])
+  deletedAt DateTime? @map("deleted_at")
+
+  @@unique([parcelId, itemId])
+  @@map("parcel_to_item")
+}
+
+model Parcel {
+  id          String         @id @default(cuid())
+  name        String
+  price       Float
+  workerWage  Float          @map("worker_wage")
+  images      String[]
+  isActive    Boolean        @default(true) @map("is_active")
+  description String?
+  createdAt   DateTime       @default(now()) @map("created_at")
+  createdBy   String         @map("created_by")
+  updatedAt   DateTime       @updatedAt @map("updated_at")
+  deletedAt   DateTime?      @map("deleted_at")
+  deletedBy   String?        @map("deleted_by")
+  cartId      String?        @map("cart_id")
+  cart        Item?          @relation(fields: [cartId], references: [id])
+  items       ParcelToItem[]
+
+  @@map("parcel")
 }

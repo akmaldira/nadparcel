@@ -56,7 +56,7 @@ export default function AddItemDialog({ categoryId }: { categoryId: string }) {
       <DialogTrigger asChild>
         <Button>
           <Plus />
-          Tambah Item
+          Item
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -67,7 +67,7 @@ export default function AddItemDialog({ categoryId }: { categoryId: string }) {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="name"

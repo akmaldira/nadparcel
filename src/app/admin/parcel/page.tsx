@@ -1,7 +1,23 @@
+import { prisma } from "@/lib/prisma";
+import ParcelTable from "./table";
+
 export default async function ParcelPage() {
+  const parcels = await prisma.parcel.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      cart: true,
+      items: {
+        include: {
+          item: true,
+        },
+      },
+    },
+  });
   return (
     <div>
-      <h1>ADMIN PARCEL PAGE</h1>
+      <ParcelTable parcels={parcels} />
     </div>
   );
 }

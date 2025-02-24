@@ -2,7 +2,7 @@
 
 import { signIn, signOut } from "@/lib/auth";
 import { hashPassword } from "@/lib/bcrypt";
-import { ADMIN_ROUTE, LOGIN_ROUTE } from "@/lib/const";
+import { LOGIN_ROUTE } from "@/lib/const";
 import { prisma } from "@/lib/prisma";
 import { ServerAction } from "@/types/type";
 import { User } from "@prisma/client";
@@ -22,7 +22,7 @@ export async function loginAction(
     return {
       status: "success",
       data: null,
-      redirect: ADMIN_ROUTE,
+      redirect: LOGIN_ROUTE,
       message: "Anda berhasil masuk.",
     };
   } catch (error: any) {

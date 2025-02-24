@@ -2,7 +2,7 @@
 
 import { ActionDialog } from "@/components/data-table/action-dialog";
 import { DataTableColumnHeader } from "@/components/data-table/column-header";
-import { formatNumber } from "@/lib/utils";
+import { formatCurrency, formatNumber } from "@/lib/utils";
 import { ItemWithHistories } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteItemDialog from "./delete-dialog";
@@ -35,6 +35,13 @@ export const columns: ColumnDef<ItemWithHistories>[] = [
       <DataTableColumnHeader column={column} title="Sisa Stok" />
     ),
     cell: ({ row }) => formatNumber(row.original.stock),
+  },
+  {
+    accessorKey: "maxPrice",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Harga Tertinggi" />
+    ),
+    cell: ({ row }) => formatCurrency(row.original.maxPrice),
   },
   {
     accessorKey: "histories",

@@ -1,4 +1,5 @@
 "use client";
+
 import {
   FormControl,
   FormField,
@@ -8,7 +9,7 @@ import {
 } from "@/components/ui/form"; // Shadcn UI import
 import { Input } from "@/components/ui/input"; // Shandcn UI Input
 import { formatCurrency } from "@/lib/utils";
-import { useReducer } from "react";
+import React, { useReducer } from "react";
 import { UseFormReturn } from "react-hook-form";
 
 type TextInputProps = {
@@ -19,10 +20,16 @@ type TextInputProps = {
 };
 
 export default function MoneyInput(props: TextInputProps) {
+  const defaultValue = props.form.getValues(props.name);
+
   const [value, setValue] = useReducer((_: any, next: string) => {
     const digits = next.replace(/\D/g, "");
     return formatCurrency(Number(digits));
-  }, formatCurrency(props.form.getValues(props.name) || "0"));
+  }, formatCurrency(defaultValue));
+
+  React.useEffect(() => {
+    setValue(defaultValue.toString());
+  }, [defaultValue]);
 
   function handleChange(
     realChangeFn: (value: number) => void,

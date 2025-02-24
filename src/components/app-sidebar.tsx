@@ -45,11 +45,22 @@ export const sidebarItems: Record<string, NavItem> = {
     icon: LayoutDashboard,
   },
   "/admin/parcel": {
-    type: "item",
+    type: "group",
     title: "Parsel",
     url: "/admin/parcel",
     acceptedRoles: ["ROOT", "ADMIN"],
+    isActive: true,
     icon: ShoppingBag,
+    items: [
+      {
+        title: "Data Parsel",
+        url: "/admin/parcel",
+      },
+      {
+        title: "Tambah Parsel",
+        url: "/admin/parcel/create",
+      },
+    ],
   },
   "/admin/cart": {
     type: "item",
