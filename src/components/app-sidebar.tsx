@@ -115,7 +115,8 @@ export function AppSidebar({
                         tooltip={item.title}
                         className={cn(
                           "text-md",
-                          pathname.startsWith(item.url) && "bg-sidebar-accent"
+                          pathname.startsWith(item.url) &&
+                            "bg-sidebar-accent mb-[2px]"
                         )}
                       >
                         {item.icon && <item.icon />}

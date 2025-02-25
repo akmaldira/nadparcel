@@ -175,10 +175,10 @@ export default function CreateParcelForm({
                 value={field.value}
                 onValueChange={field.onChange}
                 dropzoneOptions={dropZoneConfig}
-                className="relative bg-background rounded-lg p-2"
+                className="relative bg-background rounded-lg p-2 outline-dashed outline-1 outline-white"
               >
-                <FileInput className="outline-dashed outline-1 outline-white">
-                  <div className="flex items-center justify-center flex-col pt-3 pb-4 w-full ">
+                <FileInput>
+                  <div className="flex items-center justify-center flex-col pt-3 pb-4 w-full">
                     <FileUploadIcon
                       acceptedExts={Object.values(
                         dropZoneConfig.accept["image/*"]

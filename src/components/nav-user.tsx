@@ -6,8 +6,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -16,11 +14,30 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { ChevronsUpDown, LogOut } from "lucide-react";
+import { ADMIN_ROUTE, CASHIER_ROUTE, WORKER_ROUTE } from "@/lib/const";
+import { cn } from "@/lib/utils";
+import {
+  BriefcaseBusiness,
+  ChevronsUpDown,
+  Home,
+  LayoutDashboard,
+  LogOut,
+  Store,
+} from "lucide-react";
 import { User } from "next-auth";
+import { useRouter } from "next/navigation";
 
-export function NavUser({ user }: { user: User }) {
+export function NavUser({
+  user,
+  side,
+  className,
+}: {
+  user: User;
+  side?: "bottom" | "right" | "top" | "left";
+  className?: string;
+}) {
   const { isMobile } = useSidebar();
+  const router = useRouter();
 
   return (
     <SidebarMenu>
@@ -29,7 +46,10 @@ export function NavUser({ user }: { user: User }) {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className={cn(
+                "data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground",
+                className
+              )}
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user.image || ""} alt={user.name || "User"} />
@@ -47,29 +67,52 @@ export function NavUser({ user }: { user: User }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
+            side={isMobile ? "bottom" : side || "right"}
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage
-                    src={user.image || ""}
-                    alt={user.name || "User"}
-                  />
-                  <AvatarFallback className="rounded-lg">
-                    {user.name?.charAt(0).toUpperCase() || "U"}
-                    {user.name?.charAt(1).toUpperCase() || "S"}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
-                </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            {["ROOT", "ADMIN"].includes(user.role) && (
+              <DropdownMenuItem>
+                <button
+                  onClick={() => router.push(ADMIN_ROUTE)}
+                  className="flex items-center"
+                >
+                  <LayoutDashboard className="mr-2 size-4" />
+                  <span>Admin</span>
+                </button>
+              </DropdownMenuItem>
+            )}
+            {["ROOT", "ADMIN", "CASHIER"].includes(user.role) && (
+              <DropdownMenuItem>
+                <button
+                  onClick={() => router.push(CASHIER_ROUTE)}
+                  className="flex items-center"
+                >
+                  <Store className="mr-2 size-4" />
+                  <span>Kasir</span>
+                </button>
+              </DropdownMenuItem>
+            )}
+            {["ROOT", "ADMIN", "WORKER"].includes(user.role) && (
+              <DropdownMenuItem>
+                <button
+                  onClick={() => router.push(WORKER_ROUTE)}
+                  className="flex items-center"
+                >
+                  <BriefcaseBusiness className="mr-2 size-4" />
+                  <span>Pekerjaan</span>
+                </button>
+              </DropdownMenuItem>
+            )}
+            <DropdownMenuItem>
+              <button
+                onClick={() => router.push("/")}
+                className="flex items-center"
+              >
+                <Home className="mr-2 size-4" />
+                <span>Home</span>
+              </button>
+            </DropdownMenuItem>
             <DropdownMenuItem>
               <form action={logoutAction}>
                 <button type="submit" className="flex items-center">
