@@ -30,3 +30,12 @@ export const incrementStockSchema = z
     message: "Harga harus diisi jika stock lebih dari 0",
     path: ["priceEachItem"],
   });
+
+export const editItemSchema = z.object({
+  id: z.string().min(1, "ID tidak boleh kosong"),
+  name: z
+    .string()
+    .min(1, "Nama tidak boleh kosong")
+    .max(255, "Nama terlalu panjang"),
+  maxPrice: z.coerce.number().min(0, "Harga tidak boleh kurang dari 0"),
+});

@@ -13,7 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ParcelWithRelation } from "@/types/type";
 import { Eye } from "lucide-react";
 import NextImage from "next/image";
-import { useEffect, useState } from "react";
+import React from "react";
 
 interface ImageDimensions {
   width: number;
@@ -25,9 +25,12 @@ export default function ImageDialog({
 }: {
   parcel: ParcelWithRelation;
 }) {
-  const [dimensions, setDimensions] = useState<(ImageDimensions | null)[]>([]);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [dimensions, setDimensions] = React.useState<
+    (ImageDimensions | null)[]
+  >([]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const loadImageDimensions = async () => {
       const newDimensions = await Promise.all(
         parcel.images.map((image) => {
@@ -47,11 +50,13 @@ export default function ImageDialog({
       setDimensions(newDimensions);
     };
 
-    loadImageDimensions();
-  }, [parcel.images]);
+    if (dialogOpen) {
+      loadImageDimensions();
+    }
+  }, [dialogOpen, parcel.images]);
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="destructive" size="icon">
           <Eye />

@@ -10,7 +10,9 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { getUserAndValidateRoles } from "@/lib/auth";
+import { INDEX_ROUTE } from "@/lib/const";
 import Image from "next/image";
+import Link from "next/link";
 
 export default async function AdminLayout({
   children,
@@ -36,20 +38,22 @@ export default async function AdminLayout({
               orientation="vertical"
               className="mr-2 data-[orientation=vertical]:h-4"
             />
-            <Image
-              src={"/nadparcel-light.png"}
-              alt="Nadparcel Logo"
-              width={100}
-              height={100}
-              className="dark:hidden"
-            />
-            <Image
-              src={"/nadparcel-dark.png"}
-              alt="Nadparcel Logo"
-              width={100}
-              height={100}
-              className="hidden dark:block"
-            />
+            <Link href={INDEX_ROUTE}>
+              <Image
+                src={"/nadparcel-light.png"}
+                alt="Nadparcel Logo"
+                width={100}
+                height={100}
+                className="dark:hidden"
+              />
+              <Image
+                src={"/nadparcel-dark.png"}
+                alt="Nadparcel Logo"
+                width={100}
+                height={100}
+                className="hidden dark:block"
+              />
+            </Link>
           </div>
           <div className="flex items-center gap-2">
             <NavUser user={user} side="bottom" className="w-40 md:w-auto" />

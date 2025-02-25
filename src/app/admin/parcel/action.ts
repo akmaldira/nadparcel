@@ -39,7 +39,7 @@ export async function addParcelAction(
       }
     }
 
-    if (data.cartId) {
+    if (data.cartId && data.cartId !== "" && data.cartId !== "null") {
       const cart = await prisma.item.findUnique({
         where: {
           id: data.cartId,
@@ -78,7 +78,10 @@ export async function addParcelAction(
         workerWage: data.workerWage,
         images: urls,
         createdBy: user.email!,
-        cartId: data.cartId,
+        cartId:
+          data.cartId && data.cartId !== "" && data.cartId !== "null"
+            ? data.cartId
+            : null,
         items: {
           createMany: {
             data: data.items.map((item) => ({

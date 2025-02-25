@@ -6,6 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
@@ -23,6 +24,7 @@ export function ActionDialog({ items }: { items: React.ReactNode[] }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="max-w-[100px]">
         <DropdownMenuLabel>Aksi</DropdownMenuLabel>
+        <DropdownMenuSeparator />
         {items.map((item, i) => (
           <DropdownMenuItem key={i} asChild>
             {item}

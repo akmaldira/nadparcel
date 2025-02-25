@@ -8,7 +8,7 @@ import { ItemWithHistories, ServerAction } from "@/types/type";
 import { Item } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { addItemSchema, incrementStockSchema } from "./schema";
+import { addItemSchema, editItemSchema, incrementStockSchema } from "./schema";
 
 export async function addItemAction(
   values: z.infer<typeof addItemSchema>
@@ -230,6 +230,48 @@ export async function deleteItemAction(
       status: "success",
       data: deletedItem,
       message: "Item berhasil dihapus",
+    };
+  } catch (error) {
+    return handleActionError(error);
+  }
+}
+
+export async function editItemAction(
+  values: z.infer<typeof editItemSchema>
+): Promise<ServerAction<Item>> {
+  try {
+    const user = await getUserAndValidateRoles({
+      roles: ["ROOT", "ADMIN"],
+      forceRedirect: false,
+    });
+
+    if (!user) {
+      return handleActionError(
+        new ServerActionException({
+          error: "Anda tidak memiliki akses untuk melakukan aksi ini",
+          redirect: FORBIDDEN_ROUTE,
+        })
+      );
+    }
+
+    const data = await editItemSchema.parseAsync(values);
+
+    const updatedItem = await prisma.item.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        name: data.name,
+        maxPrice: data.maxPrice,
+      },
+    });
+
+    revalidatePath("/admin/item");
+    revalidatePath("/admin/cart");
+    return {
+      status: "success",
+      data: updatedItem,
+      message: "Item berhasil diperbarui",
     };
   } catch (error) {
     return handleActionError(error);

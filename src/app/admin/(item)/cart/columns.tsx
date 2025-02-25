@@ -6,6 +6,7 @@ import { formatCurrency, formatNumber } from "@/lib/utils";
 import { ItemWithHistories } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import DeleteItemDialog from "./delete-dialog";
+import EditCartDialog from "./edit-dialog";
 import IncrementStockDialog from "./increment-stock";
 import ItemStockHistory from "./stock-history";
 
@@ -55,12 +56,13 @@ export const columns: ColumnDef<ItemWithHistories>[] = [
     cell: ({ row }) => {
       const item = row.original;
       const actionItems = [
+        <EditCartDialog key={1} item={item} />,
         <IncrementStockDialog
-          key={1}
+          key={2}
           item={item}
           categoryId={item.categoryId}
         />,
-        <DeleteItemDialog key={2} item={item} />,
+        <DeleteItemDialog key={3} item={item} />,
       ];
 
       return <ActionDialog items={actionItems} />;

@@ -5,9 +5,10 @@ export default async function CashierLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const _user = await getUserAndValidateRoles({
+  const _ = await getUserAndValidateRoles({
     roles: ["ROOT", "ADMIN", "CASHIER"],
     forceRedirect: true,
   });
+
   return children;
 }
