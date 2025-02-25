@@ -1,72 +1,56 @@
 "use client";
 
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"; // Shadcn UI import
-import { Input } from "@/components/ui/input"; // Shandcn UI Input
 import { formatCurrency } from "@/lib/utils";
-import React, { useReducer } from "react";
-import { UseFormReturn } from "react-hook-form";
+import React from "react";
+import { Input } from "./ui/input";
 
 type TextInputProps = {
-  form: UseFormReturn<any>;
-  name: string;
-  label: string;
   placeholder: string;
+  value?: string;
+  onChange?: (value: number) => void;
+  disabled?: boolean;
+  max?: number;
 };
 
 export default function MoneyInput(props: TextInputProps) {
-  const defaultValue = props.form.getValues(props.name);
-
-  const [value, setValue] = useReducer((_: any, next: string) => {
-    const digits = next.replace(/\D/g, "");
-    return formatCurrency(Number(digits));
-  }, formatCurrency(defaultValue));
+  const [value, setValue] = React.useReducer((_: any, next: string) => {
+    const digits = Number(next.replace(/\D/g, ""));
+    let realValue = Number(digits);
+    if (props.max) {
+      if (realValue > props.max) {
+        realValue = props.max;
+      }
+    }
+    return formatCurrency(realValue);
+  }, formatCurrency(Number(props.value || "0")));
 
   React.useEffect(() => {
-    setValue(defaultValue.toString());
-  }, [defaultValue]);
+    setValue(props.value?.toString() || "0");
+  }, [props.value]);
 
-  function handleChange(
-    realChangeFn: (value: number) => void,
-    formattedValue: string
-  ) {
+  function handleChange(formattedValue: string) {
     const digits = formattedValue.replace(/\D/g, "");
-    const realValue = Number(digits);
-    realChangeFn(realValue);
+    let realValue = Number(digits);
+    if (props.max) {
+      if (realValue > props.max) {
+        realValue = props.max;
+      }
+    }
+    if (props.onChange) {
+      props.onChange(realValue);
+    }
   }
 
   return (
-    <FormField
-      control={props.form.control}
-      name={props.name}
-      render={({ field }) => {
-        field.value = value;
-        const _change = field.onChange;
-
-        return (
-          <FormItem>
-            <FormLabel>{props.label}</FormLabel>
-            <FormControl>
-              <Input
-                placeholder={props.placeholder}
-                type="text"
-                {...field}
-                onChange={(ev) => {
-                  setValue(ev.target.value);
-                  handleChange(_change, ev.target.value);
-                }}
-                value={value}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        );
+    <Input
+      placeholder={props.placeholder}
+      type="text"
+      onChange={(ev) => {
+        setValue(ev.target.value);
+        handleChange(ev.target.value);
       }}
+      value={value}
+      disabled={props.disabled}
     />
   );
 }

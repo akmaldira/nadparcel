@@ -56,3 +56,15 @@ export function formatNumber(number: number, locale: string = "id-ID") {
     minimumFractionDigits: 0,
   }).format(number);
 }
+
+export function generateInvoiceId(): string {
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let invoiceId = "";
+
+  for (let i = 0; i < 6; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    invoiceId += characters.charAt(randomIndex);
+  }
+
+  return invoiceId;
+}

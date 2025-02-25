@@ -1,7 +1,7 @@
 "use client";
 
 import FileUploadIcon from "@/components/icon/file-upload";
-import MoneyInput from "@/components/money-input";
+import MoneyInput from "@/components/money-input-form";
 import { Button } from "@/components/ui/button";
 import {
   FileInput,

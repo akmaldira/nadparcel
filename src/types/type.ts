@@ -49,3 +49,21 @@ export type ParcelWithRelation = Prisma.ParcelGetPayload<{
     };
   };
 }>;
+
+export type CashierParcel = {
+  type: "parcel";
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+};
+
+export type CashierCart = {
+  type: "cart";
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+};
+
+export type CashierItem = CashierParcel | CashierCart;

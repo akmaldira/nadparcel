@@ -1,6 +1,6 @@
 "use client";
 
-import MoneyInput from "@/components/money-input";
+import MoneyInput from "@/components/money-input-form";
 import { Button } from "@/components/ui/button";
 import {
   Command,
